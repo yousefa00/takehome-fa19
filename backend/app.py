@@ -52,8 +52,13 @@ def mirror(name):
     return create_response(data)
 
 @app.route("/contacts", methods=['GET'])
-def get_all_contacts():
-    return create_response({"contacts": db.get('contacts')})
+def get_contacts():
+    hobby = request.args.get('hobby')  # Retrieves hobby query param
+    if hobby is not None:  # Checks if a hobby param existed
+        if db.getByHobby('contacts', hobby) is None:
+            return create_response(status=404, message="No contact with this hobby exists")
+        return create_response({"contacts": db.getByHobby('contacts', hobby)})
+    return create_response({"contacts": db.get('contacts')})  # If no hobby param existed, this runs
 
 @app.route("/shows/<id>", methods=['DELETE'])
 def delete_show(id):
