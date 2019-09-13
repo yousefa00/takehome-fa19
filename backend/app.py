@@ -10,7 +10,7 @@ def create_response(
     data: dict = None, status: int = 200, message: str = ""
 ) -> Tuple[Response, int]:
     """Wraps response in a consistent format throughout the API.
-    
+
     Format inspired by https://medium.com/@shazow/how-i-design-json-api-responses-71900f00f2db
     Modifications included:
     - make success a boolean since there's only 2 values
@@ -62,8 +62,11 @@ def delete_show(id):
     db.deleteById('contacts', int(id))
     return create_response(message="Contact deleted")
 
-
-# TODO: Implement the rest of the API here!
+@app.route("/contacts/<id>", methods=['GET'])
+def get_contact_with_id(id):
+    if db.getById('contacts', int(id)) is None:
+        return create_response(status=404, message="No contact with this id exists")
+    return create_response({"contacts": db.getById('contacts', int(id))})
 
 """
 ~~~~~~~~~~~~ END API ~~~~~~~~~~~~
