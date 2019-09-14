@@ -73,6 +73,26 @@ def get_contact_with_id(id):
         return create_response(status=404, message="No contact with this id exists")
     return create_response({"contacts": db.getById('contacts', int(id))})
 
+@app.route("/contacts", methods=['POST'])
+def add_contact():
+    data = request.json
+    print(type(data))
+    missing_field = []
+
+    if not check_if_key_exists(data, "name"):
+        missing_field.append('name')
+    if not check_if_key_exists(data, "nickname"):
+        missing_field.append('nickname')
+    if not check_if_key_exists(data, "hobby"):
+        missing_field.append('hobby')
+
+    if len(missing_field) > 0:
+        return create_response(status=422, message="Missing field(s): " + ", ".join(missing_field))
+    return create_response(status=201, data={"contacts": db.create('contacts', data)})
+
+def check_if_key_exists(dictionary, key):
+    return key in dictionary
+
 """
 ~~~~~~~~~~~~ END API ~~~~~~~~~~~~
 """
