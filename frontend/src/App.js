@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import Instructions from './Instructions'
+import Counter from './Counter'
 import Contact from './Contact'
 
 class App extends Component {
@@ -12,12 +13,14 @@ class App extends Component {
         {id: 3, name: "Daniel", nickname: "oppa", hobby: "losing money with options trading"},
       ]
     }
+
   }
 
   render() {
     return (
       <div className="App">
         <Instructions complete={true}/>
+        <Counter/>
 
         {this.state.contacts.map(x => (
           <Contact id={x.id} name={x.name} nickcname={x.nickname} hobby={x.hobby} />
